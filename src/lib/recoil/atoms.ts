@@ -6,8 +6,9 @@ type User = {
 }
 
 type Game = {
+    id: string;
     players: {
-        userId: string;
+        username: string;
         point: number;
         multiplier: number;
     }[],
@@ -26,10 +27,16 @@ const userAtom = atom<User>({
 const gameAtom = atom<Game>({
     key: 'game',
     default: {
+        id: "",
         players: [],
         chatId: "",
         winNumber: 0
     },
 });
 
-export { userAtom };
+const gameStatusAtom = atom<boolean>({
+    key: 'gameStatus',
+    default: false
+});
+
+export { userAtom, gameAtom, gameStatusAtom };

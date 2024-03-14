@@ -1,6 +1,7 @@
 "use client"
 
 import AnimatedLine from "@/components/AnimatedLine"
+import Chart from "@/components/Chart"
 import Chat from "@/components/Chat"
 import GameResult from "@/components/GameResult"
 import Header from "@/components/Header"
@@ -29,7 +30,8 @@ export default function Home() {
           <div className="gap-2 w-4/6">
             <Header />
             <div className="relative bg-secondary w-full border border-gray-700 shadow-lg p-4 rounded-lg flex flex-row mt-4 h-80">
-              <AnimatedLine end={200} speed={3} />
+              <Chart />
+              <h2 className="text-4xl m-auto font-bold font-mono mt-4">0x</h2>
             </div>
           </div>
         </div>

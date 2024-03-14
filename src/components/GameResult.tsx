@@ -1,9 +1,13 @@
-import { userAtom } from '@/lib/recoil/atoms';
-import React, { useState } from 'react'
-import { useRecoilValue } from 'recoil';
+import useGame from '@/lib/hooks/useGame';
+import { gameAtom, gameStatusAtom, userAtom } from '@/lib/recoil/atoms';
+import React, { useCallback, useState } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const GameResult = () => {
-  const user = useRecoilValue(userAtom);
+  const {register, startGame} = useGame()
+  const [user, setUser] = useRecoilState(userAtom);
+  const game = useRecoilValue(gameAtom);
+  const [gameStatus, setGameStatus] = useRecoilState(gameStatusAtom);
   const [point, setPoint] = useState<number>(50);
   const [multiplier, setMultiplier] = useState<number>(1.00);
 
@@ -30,6 +34,19 @@ const GameResult = () => {
       setMultiplier(multiplier - 0.01)
     }
   }
+
+  const handleStartGame = useCallback(async() => {
+
+    await startGame({
+      gameId: game.id,
+      username: user?.username,
+      point,
+      multiplier
+    });
+
+    setGameStatus(true);
+
+  }, [startGame]);
 
   return (
     <div className="gap-1 w-2/6 shadow-lg  mr-4 rounded-lg">
@@ -71,7 +88,7 @@ const GameResult = () => {
 
       <button 
         className={`w-full mt-4 p-2 rounded-lg font-mono bg-gradient-to-r from-blue-500 to-teal-500`}
-        type='submit'
+        onClick={() => handleStartGame()}
       >
         Start
       </button>
@@ -91,31 +108,13 @@ const GameResult = () => {
           </tr>
         </thead>
         <tbody>
-          <tr className="border-b border-neutral-200 dark:border-white/10 bg-secondary">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">1</td>
-            <td className="whitespace-nowrap px-6 py-2">Mark</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
-          <tr className="border-b border-neutral-200 dark:border-white/10">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">2</td>
-            <td className="whitespace-nowrap px-6 py-2">Jacob</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
-          <tr className="border-b border-neutral-200 dark:border-white/10 bg-secondary">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">3</td>
-            <td className="whitespace-nowrap px-6 py-2">Larry</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
-          <tr className="border-b border-neutral-200 dark:border-white/10">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">4</td>
-            <td className="whitespace-nowrap px-6 py-2">Meret</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
-          <tr className="border-b border-neutral-200 dark:border-white/10 bg-secondary">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">5</td>
-            <td className="whitespace-nowrap px-6 py-2">Myrat</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
+          {game.players.length ? game.players.map((player, index) => (
+            <tr className="border-b border-neutral-200 dark:border-white/10 bg-secondary" key={player.username}>
+            <td className="whitespace-nowrap px-6 py-2 font-medium">{index+1}</td>
+            <td className="whitespace-nowrap px-6 py-2">{player.username}</td>
+            <td className="whitespace-nowrap px-6 py-2">{gameStatus ? player.multiplier : 0}</td>
+          </tr>  
+          )): <></>}
         </tbody>
       </table>
       </div>

@@ -73,7 +73,7 @@ const AnimatedLine: FC<Props> = ({ speed, end }) => {
         </style>
       </svg>
       <div className="absolute right-0 top-0 w-full flex justify-center">
-        <h2 className="text-4xl m-auto font-bold font-mono">{current}x</h2>
+        <h2 className="text-4xl m-auto font-bold font-mono mt-4">{current}x</h2>
       </div>
     </>
   )

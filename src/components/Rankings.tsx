@@ -1,6 +1,10 @@
+import { gameAtom, gameStatusAtom } from '@/lib/recoil/atoms'
 import React from 'react'
+import { useRecoilValue } from 'recoil'
 
 const Rankings = () => {
+  const game = useRecoilValue(gameAtom);
+  const gameStatus = useRecoilValue(gameStatusAtom);
   return (
     <div className="flex w-1/2 flex-col">
       <div className="flex">
@@ -17,31 +21,15 @@ const Rankings = () => {
           </tr>
         </thead>
         <tbody>
-          <tr className="border-b border-neutral-200 dark:border-white/10 bg-secondary">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">1</td>
-            <td className="whitespace-nowrap px-6 py-2">Mark</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
-          <tr className="border-b border-neutral-200 dark:border-white/10">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">2</td>
-            <td className="whitespace-nowrap px-6 py-2">Jacob</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
-          <tr className="border-b border-neutral-200 dark:border-white/10 bg-secondary">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">3</td>
-            <td className="whitespace-nowrap px-6 py-2">Larry</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
-          <tr className="border-b border-neutral-200 dark:border-white/10">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">4</td>
-            <td className="whitespace-nowrap px-6 py-2">Meret</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
-          <tr className="border-b border-neutral-200 dark:border-white/10 bg-secondary">
-            <td className="whitespace-nowrap px-6 py-2 font-medium">5</td>
-            <td className="whitespace-nowrap px-6 py-2">Myrat</td>
-            <td className="whitespace-nowrap px-6 py-2">123</td>
-          </tr>
+          {
+            game.players.length ? game.players.map((player, index) => (
+              <tr className="border-b border-neutral-200 dark:border-white/10 bg-secondary" key={player.username}>
+                <td className="whitespace-nowrap px-6 py-2 font-medium">{index+1}</td>
+                <td className="whitespace-nowrap px-6 py-2">{player.username}</td>
+                <td className="whitespace-nowrap px-6 py-2">{gameStatus ? player.point*player.multiplier : 0}</td>
+              </tr>    
+            )) : <></>
+          }
         </tbody>
       </table>
       </div>
